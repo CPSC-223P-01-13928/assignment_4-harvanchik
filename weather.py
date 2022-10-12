@@ -1,100 +1,175 @@
-import calendar
 import json
 
-# The function should open the filename in read mode and return a dictionary of the JSON decoded contents of the file.
-# If the file does not exist, the function should accept the FileNotFoundError and return an empty dictionary.
-def read_data(fileName):
+import calendar
+
+ 
+
+def read_data(filename):
+
     try:
-        with open(fileName, 'r') as f:
+
+        with open(filename, 'r') as f:
+
             return json.load(f)
+
     except FileNotFoundError:
+
         return {}
 
-# The function should open the filename in write mode and write the dictionary data into the file encoded as JSON.
-def write_data(fileName, data):
-    with open(fileName, 'w') as f:
+ 
+
+def write_data(data, filename):
+
+    with open(filename, 'w') as f:
+
         json.dump(data, f)
 
-# The function should return the maximum temperature for all dictionary data where the key contains the date as YYYYMMDD.
+ 
+
 def max_temperature(data, date):
-    maxTemp = 0
-    for key in data:
-        if date in key[0:8]:
-            if data[key]['t'] > maxTemp:
-                maxTemp = data[key]['t']
-    return maxTemp
 
-# The function should return the minimum temperature for all dictionary data where the key contains the date as YYYYMMDD.
+    x = 0
+
+    for key in data:
+
+        if date == key[0:8]:
+
+            if data[key]['t'] > x:
+
+                x = data[key]['t']
+
+    return x
+
+ 
+
 def min_temperature(data, date):
-    minTemp = 999
-    for key in data:
-        if date in key[0:8]:
-            if data[key]['t'] < minTemp:
-                minTemp = data[key]['t']
-    return minTemp
 
-# The function should return the maximum humidity for all dictionary data where the key contains the date as YYYYMMDD.
+    x = 99999
+
+    for key in data:
+
+        if date == key[0:8]:
+
+            if data[key]['t'] < x:
+
+                x = data[key]['t']
+
+    return x
+
+ 
+
 def max_humidity(data, date):
-    maxHum = 0
-    for key in data:
-        if date in key[0:8]:
-            if data[key]['h'] > maxHum:
-                maxHum = data[key]['h']
-    return maxHum
 
-# The function should return the minimum humidity for all dictionary data where the key contains the date as YYYYMMDD.
+    x = 0
+
+    for key in data:
+
+        if date == key[0:8]:
+
+            if data[key]['h'] > x:
+
+                x = data[key]['h']
+
+    return x
+
+ 
+
 def min_humidity(data, date):
-    minHum = 999
-    for key in data:
-        if date in key[0:8]:
-            if data[key]['h'] < minHum:
-                minHum = data[key]['h']
-    return minHum
 
-# The function should return the sum of rainfall for all dictionary data where the key contains the date as YYYYMMDD.
-def tot_rain(data, date):
-    totRain = 0
-    for key in data:
-        if date in key[0:8]:
-            totRain += data[key]['r']
-    return totRain
+    x = 99999
 
-# The function should return a single string which when passed to any print function will display on the screen formatted exactly as indicated in the example output below. You will most likely be appending strings together using a literal "\n" where a newline is desired. To get the month name, you can import the builtin calendar module and call the month_name function passing it the month as an integer.
+    for key in data:
+
+        if date == key[0:8]:
+
+            if data[key]['h'] < x:
+
+                x = data[key]['h']
+
+    return x
+
+ 
+
+def tot_rain( data, date):
+
+    x = 0.0
+
+    for key in data:
+
+        if date == key[0:8]:
+
+            x = x + data[key]['r']
+
+    return x
+
+ 
+
 def report_daily(data, date):
-    # display string
+
     display = "========================= DAILY REPORT ========================\n"
-    display += "Date                      Time  Temperature  Humidity  Rainfall\n"
-    display += "====================  ========  ===========  ========  ========\n"
+
+    display = display + "Date                      Time  Temperature  Humidity  Rainfall\n"
+
+    display = display + "====================  ========  ===========  ========  ========\n"
+
+ 
+
     for key in data:
-        if date in key[0:8]:
-            month = calendar.month_name[int(date[4:6])]
-            day = str(int(date[6:8]))
-            year = str(int(date[0:4]))
-            date = month + " " + day + ", " + year
-            time = key[8:10] + ":" + key[10:12] + ":" + key[12:14]
+
+        if date == key[0:8]:
+
+            m = calendar.month_name[int(date[4:6])] + " " + str(int(date[6:8]))+ ", " + str(int(date[0:4]))
+
+            tm = key[8:10] + ":" + key[10:12] + ":" + key[12:14]
+
             t = data[key]['t']
+
             h = data[key]['h']
+
             r = data[key]['r']
 
-            display += f'{month:22}  {time:8}  {t:10}  {h:8}  {r:8}\n'
+            display = display + f'{m:22}{tm:8}{t:13}{h:10}{r:10.2f}' + "\n"
 
-# The function should return a single string which when passed to any print function will display on the screen formatted exactly as indicated in the example output below. You will most likely be appending strings together using a literal "\n" where a newline is desired. To get the month name, you can import the builtin calendar module and call the month_name function passing it the month as an integer.
-def report_historical(data, date):
-    # display string
-    display = "======================== HISTORICAL REPORT ========================\n"
-    display += "Date                      Time  Temperature  Humidity  Rainfall\n"
-    display += "====================  ========  ===========  ========  ========\n"
+    return display
+
+ 
+
+def report_historical(data):
+
+    display = "============================== HISTORICAL REPORT ===========================\n"
+
+    display = display + "                          Minimum      Maximum   Minumum   Maximum     Total\n"
+
+    display = display + "Date                  Temperature  Temperature  Humidity  Humidity  Rainfall\n"
+
+    display = display + "====================  ===========  ===========  ========  ========  ========\n"
+
+ 
+
+    d = ''
+
     for key in data:
-        if date in key[0:8]:
-            month = calendar.month_name[int(date[4:6])]
-            day = str(int(date[6:8]))
-            year = str(int(date[0:4]))
-            date = month + " " + day + ", " + year
-            time = key[8:10] + ":" + key[10:12] + ":" + key[12:14]
-            t = data[key]['t']
-            h = data[key]['h']
-            r = data[key]['r']
 
-            display += f'{month:22}  {time:8}  {t:10}  {h:8}  {r:8}\n'
+        if d == key[0:8]:
 
+            continue
 
+        else:
+
+            d = key[0:8]
+
+            m = calendar.month_name[int(d[4:6])] + " " + str(int(d[6:8]))+ ", " + str(int(d[0:4]))
+
+            min_temp = min_temperature(data = data, date = d)
+
+            max_temp = max_temperature(data = data, date = d)
+
+            min_hum = min_humidity(data = data, date = d)
+
+            max_hum= max_humidity(data = data, date = d)
+
+            rain = tot_rain(data = data, date = d)
+
+            display = display + f'{m:20}{min_temp:13}{max_temp:13}{min_hum:10}{max_hum:10}{rain:10.2f}' + "\n"
+
+    return display

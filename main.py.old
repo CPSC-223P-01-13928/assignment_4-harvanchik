@@ -1,0 +1,38 @@
+from asyncore import read
+from weather import *
+
+file = 'w.dat'
+
+myChoice = 0
+while(True):
+    print("      *** TUFFY TITAN WEATHER LOGGER MAIN MENU")
+    print()
+    print("1.Set data FileName")
+    print("2.Add Weather Data")
+    print("3.Print Daily Report")
+    print("4.Print Historical Report")
+    print("9.Exit the Program")
+    myChoice = input("Enter menu choice: ")
+    print()
+
+    if myChoice == '1':
+        file = input("Enter the file name: ")
+        weather = read_data(file)
+    elif myChoice == '2':
+        date = input("Enter date: ")
+        time = input("Enter time: ")
+        temp = input("Enter temperature: ")
+        hum = input("Enter humidity: ")
+        rain = input("Enter rainfall: ")
+        weather[date + time] = {'t': int(temp), 'h': int(hum), 'r': int(rain)}
+        write_data(file, weather)
+    elif myChoice == '3':
+        date = input("Enter date: ")
+        display = report_daily(weather, date)
+        print(display)
+    elif myChoice == '4':
+        display = report_historical(weather, date)
+        print(display)
+    elif myChoice == '9':
+        break
+
